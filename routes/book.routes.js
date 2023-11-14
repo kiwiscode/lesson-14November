@@ -54,4 +54,40 @@ router.post("/book/create", (req, res) => {
   console.log(title, description, author, rating);
 });
 
+router.get("/books/:bookId/edit", (req, res) => {
+  const { bookId } = req.params;
+  Book.findById(bookId)
+    .then((bookToEdit) => {
+      console.log("BOOK THAT WE WANT TO EDIT =>", bookToEdit);
+
+      res.render("books/book-edit.hbs", { book: bookToEdit });
+    })
+    .catch(() => {
+      res
+        .status(404)
+        .json({ erroMessage: "Error occured while trying to edit book!" });
+    });
+});
+
+router.post("/books/:bookId/edit", (req, res) => {
+  const { bookId } = req.params;
+  const { title, author, description, rating } = req.body;
+  console.log(title, author, description, rating);
+
+  console.log("BOOK ID THAT WE WANT IT TO UPDATE =>", bookId);
+
+  Book.findByIdAndUpdate(
+    bookId,
+    { title, description, author, rating },
+    { new: true }
+  )
+    .then((updatedBook) => {
+      console.log("BOOK UPDATED !", updatedBook);
+      res.redirect(`/books/${updatedBook.id}`);
+    })
+    .catch(() => {
+      console.log("Error occured while fetching data!");
+    });
+});
+
 module.exports = router;
