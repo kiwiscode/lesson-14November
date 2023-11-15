@@ -94,7 +94,7 @@ router.post("/books/:bookId/delete", (req, res) => {
   const { bookId } = req.params;
 
   console.log("WHAT YOU WANT TO DO WITH THIS BOOK ID =>", bookId);
-  //
+
   Book.findByIdAndDelete(bookId)
     .then(() => res.status(200).json({ message: "Book deleted 🧼" }))
     .catch(() => {
